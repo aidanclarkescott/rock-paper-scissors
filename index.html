@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Rock Paper Scissors Game</title>
+  </head>
+  <body>
+    <h1>Rock Paper Scissors Game!</h1>
+    <p>
+      Welcome to a Rock, Paper, Scissors game where you play against the
+      computer! Enter your selection into the popup box. There are 5 rounds.
+    </p>
+
+    <script>
+      function computerPlay() {
+        let choice = Math.random();
+        if (choice <= 0.33) {
+          return "rock";
+        } else if (choice > 0.33 && choice <= 0.66) {
+          return "paper";
+        } else {
+          return "scissors";
+        }
+      }
+
+      function playRound(playerSelection, computerSelection) {
+        let player = playerSelection.toLowerCase();
+        if (player == computerSelection) {
+          return "Tie!";
+        } else if (player == "rock" && computerSelection == "scissors") {
+          return "You Win! Rock beats Scissors";
+        } else if (player == "paper" && computerSelection == "rock") {
+          return "You Win! Paper beats Rock";
+        } else if (player == "scissors" && computerSelection == "paper") {
+          return "You Win! Scissors beats Paper";
+        } else if (computerSelection == "rock" && player == "scissors") {
+          return "You Lose! Rock beats Scissors";
+        } else if (computerSelection == "paper" && player == "rock") {
+          return "You Lose! Paper beats Rock";
+        } else if (computerSelection == "scissors" && player == "paper") {
+          return "You Lose! Scissors beats Paper";
+        } else {
+          return "You input an invalid selection!";
+        }
+      }
+
+      function game() {
+        for (i = 0; i < 5; i++) {
+          console.log(
+            playRound(prompt("Input your selection:"), computerPlay())
+          );
+        }
+      }
+
+      game();
+    </script>
+  </body>
+</html>
