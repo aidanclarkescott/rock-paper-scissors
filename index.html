@@ -1,15 +1,91 @@
 <html>
   <head>
     <title>Rock Paper Scissors Game</title>
+    <style>
+      body,
+      html {
+        background-image: linear-gradient(
+          to bottom right,
+          #2ac8da 50%,
+          #2cb5e8 100%
+        );
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+
+      h1 {
+        text-align: center;
+        margin: 0 auto;
+        padding: 10px 0 10px 0;
+      }
+
+      p {
+        text-align: center;
+      }
+
+      #selection-buttons {
+        position: relative;
+        margin: 0 auto;
+        text-align: center;
+        top: 80px;
+      }
+
+      button {
+        padding: 50px 80px 50px 80px;
+        margin: 0 20px 0 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgb(252, 250, 255);
+      }
+
+      button:hover {
+        transform: scale(1.1);
+        transition: 0.1s;
+        box-shadow: 0px 0px 25px 5px white;
+      }
+
+      #player-score {
+        float: left;
+        text-align: center;
+        margin-left: 120px;
+      }
+
+      #computer-score {
+        float: right;
+        margin-right: 100px;
+      }
+
+      #round-result {
+        text-align: center;
+        clear: both;
+        position: relative;
+        top: 50px;
+      }
+    </style>
   </head>
   <body>
     <h1>Rock Paper Scissors Game!</h1>
     <p>
       Welcome to a Rock, Paper, Scissors game where you play against the
-      computer! Enter your selection into the popup box. There are 5 rounds.
+      computer! Click your selection below. First to 3 points wins!
     </p>
+    <div id="selection-buttons">
+      <button id="rock-btn">Rock</button>
+      <button id="paper-btn">Paper</button>
+      <button id="scissors-btn">Scissors</button>
+    </div>
+
+    <div id="player-score">Your Score</div>
+
+    <div id="computer-score">Computer Score</div>
+
+    <div id="round-result"></div>
 
     <script>
+      let playerScore = 0;
+      let compScore = 0;
+
       function computerPlay() {
         let choice = Math.random();
         if (choice <= 0.33) {
@@ -24,33 +100,58 @@
       function playRound(playerSelection, computerSelection) {
         let player = playerSelection.toLowerCase();
         if (player == computerSelection) {
-          return "Tie!";
+          roundResult.textContent = "Tie!";
         } else if (player == "rock" && computerSelection == "scissors") {
-          return "You Win! Rock beats Scissors";
+          playerScore++;
+          roundResult.textContent = "You Win! Rock beats Scissors";
         } else if (player == "paper" && computerSelection == "rock") {
-          return "You Win! Paper beats Rock";
+          playerScore++;
+          roundResult.textContent = "You Win! Paper beats Rock";
         } else if (player == "scissors" && computerSelection == "paper") {
-          return "You Win! Scissors beats Paper";
+          playerScore++;
+          roundResult.textContent = "You Win! Scissors beats Paper";
         } else if (computerSelection == "rock" && player == "scissors") {
-          return "You Lose! Rock beats Scissors";
+          compScore++;
+          roundResult.textContent = "You Lose! Rock beats Scissors";
         } else if (computerSelection == "paper" && player == "rock") {
-          return "You Lose! Paper beats Rock";
+          compScore++;
+          roundResult.textContent = "You Lose! Paper beats Rock";
         } else if (computerSelection == "scissors" && player == "paper") {
-          return "You Lose! Scissors beats Paper";
-        } else {
-          return "You input an invalid selection!";
+          compScore++;
+          roundResult.textContent = "You Lose! Scissors beats Paper";
         }
       }
 
-      function game() {
-        for (i = 0; i < 5; i++) {
-          console.log(
-            playRound(prompt("Input your selection:"), computerPlay())
-          );
+      const playerScoreText = document.querySelector("#player-score");
+      const computerScoreText = document.querySelector("#computer-score");
+      const playerScorePara = document.createElement("p");
+      const computerScorePara = document.createElement("p");
+
+      playerScorePara.textContent = "0";
+      computerScorePara.textContent = "0";
+      playerScoreText.appendChild(playerScorePara);
+      computerScoreText.appendChild(computerScorePara);
+
+      const roundResult = document.querySelector("#round-result");
+
+      const selections = document.querySelectorAll("#selection-buttons");
+
+      Array.from(selections).forEach((element) => {
+        element.addEventListener("click", (e) => {
+          playRound(`${e.target.innerText}`, computerPlay());
+          determineScore();
+        });
+      });
+
+      function determineScore() {
+        playerScorePara.textContent = playerScore;
+        computerScorePara.textContent = compScore;
+        if (playerScore == 3) {
+          roundResult.textContent = "You Win the Game!";
+        } else if (compScore == 3) {
+          roundResult.textContent = "You Lose the Game.";
         }
       }
-
-      game();
     </script>
   </body>
 </html>
