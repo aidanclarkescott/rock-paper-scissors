@@ -31,15 +31,15 @@
         top: 80px;
       }
 
-      button {
+      #selection-buttons button {
         padding: 50px 80px 50px 80px;
-        margin: 0 20px 0 20px;
+        margin: 0 17px 0 23px;
         border: none;
         border-radius: 5px;
         background-color: rgb(252, 250, 255);
       }
 
-      button:hover {
+      #selection-buttons button:hover {
         transform: scale(1.1);
         transition: 0.1s;
         box-shadow: 0px 0px 25px 5px white;
@@ -56,11 +56,38 @@
         margin-right: 100px;
       }
 
+      #vs {
+        text-align: center;
+        position: relative;
+        top: 108px;
+        font-size: 20px;
+      }
+
       #round-result {
         text-align: center;
         clear: both;
         position: relative;
-        top: 50px;
+        top: 180px;
+        font-size: 20px;
+      }
+
+      #computer-choice-container {
+        text-align: center;
+      }
+
+      #computer-choice {
+        display: inline-block;
+        position: relative;
+        top: 135px;
+        width: 198px;
+        height: 110px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgb(252, 250, 255);
+      }
+
+      #computer-choice p {
+        padding-top: 26px;
       }
     </style>
   </head>
@@ -80,6 +107,12 @@
 
     <div id="computer-score">Computer Score</div>
 
+    <div id="vs">Vs</div>
+
+    <div id="computer-choice-container">
+      <div id="computer-choice"><p>Computer Selection</p></div>
+    </div>
+
     <div id="round-result"></div>
 
     <script>
@@ -89,34 +122,35 @@
       function computerPlay() {
         let choice = Math.random();
         if (choice <= 0.33) {
-          return "rock";
+          return "Rock";
         } else if (choice > 0.33 && choice <= 0.66) {
-          return "paper";
+          return "Paper";
         } else {
-          return "scissors";
+          return "Scissors";
         }
       }
 
       function playRound(playerSelection, computerSelection) {
         let player = playerSelection.toLowerCase();
-        if (player == computerSelection) {
+        let computer = computerSelection.toLowerCase();
+        if (player == computer) {
           roundResult.textContent = "Tie!";
-        } else if (player == "rock" && computerSelection == "scissors") {
+        } else if (player == "rock" && computer == "scissors") {
           playerScore++;
           roundResult.textContent = "You Win! Rock beats Scissors";
-        } else if (player == "paper" && computerSelection == "rock") {
+        } else if (player == "paper" && computer == "rock") {
           playerScore++;
           roundResult.textContent = "You Win! Paper beats Rock";
-        } else if (player == "scissors" && computerSelection == "paper") {
+        } else if (player == "scissors" && computer == "paper") {
           playerScore++;
           roundResult.textContent = "You Win! Scissors beats Paper";
-        } else if (computerSelection == "rock" && player == "scissors") {
+        } else if (computer == "rock" && player == "scissors") {
           compScore++;
           roundResult.textContent = "You Lose! Rock beats Scissors";
-        } else if (computerSelection == "paper" && player == "rock") {
+        } else if (computer == "paper" && player == "rock") {
           compScore++;
           roundResult.textContent = "You Lose! Paper beats Rock";
-        } else if (computerSelection == "scissors" && player == "paper") {
+        } else if (computer == "scissors" && player == "paper") {
           compScore++;
           roundResult.textContent = "You Lose! Scissors beats Paper";
         }
@@ -126,6 +160,7 @@
       const computerScoreText = document.querySelector("#computer-score");
       const playerScorePara = document.createElement("p");
       const computerScorePara = document.createElement("p");
+      const computerSelection = document.querySelector("#computer-choice p");
 
       playerScorePara.textContent = "0";
       computerScorePara.textContent = "0";
@@ -138,7 +173,9 @@
 
       Array.from(selections).forEach((element) => {
         element.addEventListener("click", (e) => {
-          playRound(`${e.target.innerText}`, computerPlay());
+          let computerChoice = computerPlay();
+          computerSelection.textContent = computerChoice;
+          playRound(`${e.target.innerText}`, computerChoice);
           determineScore();
         });
       });
